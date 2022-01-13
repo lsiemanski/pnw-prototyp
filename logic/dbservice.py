@@ -1,0 +1,1 @@
+# TODO: w tym pliku znajdować się będzie logika związana z komunikacją z bazą danych
