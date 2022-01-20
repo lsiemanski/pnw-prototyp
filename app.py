@@ -13,7 +13,7 @@ class App(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         self.title('Szacowanie wartości ugięcia belki żelbetowej')
-        self.geometry("500x400")
+        self.geometry("500x600")
         self.resizable(0, 0)
 
         container = tk.Frame(self)
