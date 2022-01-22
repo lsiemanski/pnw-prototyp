@@ -14,7 +14,6 @@ class App(tk.Tk):
 
         self.title('Szacowanie wartości ugięcia belki żelbetowej')
         self.geometry("500x600")
-        self.resizable(0, 0)
 
         container = tk.Frame(self)
         container.pack(side="top", fill="x", expand=True)
