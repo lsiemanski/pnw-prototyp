@@ -71,10 +71,4 @@ class DataBase:
     def get_results_for_user(self, username):
         result = tdb.Query()
         return self.results.search(result.username == username)
-
-db = DataBase()
-db.insert_user('michal', 'Tokyo2017', 'michalbugno1@gmail.com', 'admin')
-print(db.get_users())
-print(db.get_user('michal'))
-print(db.get_samples())
     
