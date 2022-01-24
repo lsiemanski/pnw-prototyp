@@ -79,7 +79,7 @@ class DataBase:
     def check_login_data(self, username, password):
         user = self.get_user(username)
         if user == None:
-            raise UserError("User not found!")
+            return False
         stored_password = user["password"]
         password = password.encode()
         password = hl.sha256(password).hexdigest()
