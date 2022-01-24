@@ -1,3 +1,4 @@
+from numpy import true_divide
 import tinydb as tdb
 import hashlib as hl
 
@@ -20,7 +21,7 @@ class DataBase:
         self.users.insert({
             'username' : username,
             'password' : hl.sha256(password).hexdigest(),
-            'email' : 'email',
+            'email' : email,
             'role' : role
         })
 
@@ -66,9 +67,22 @@ class DataBase:
 
     def get_user(self, username):
         user = tdb.Query()
-        return self.users.search(user.username == username)
+        user = self.users.search(user.username == username)
+        if len(user) == 0:
+            return None
+        return user[0]
 
     def get_results_for_user(self, username):
         result = tdb.Query()
         return self.results.search(result.username == username)
-    
+
+    def check_login_data(self, username, password):
+        user = self.get_user(username)
+        if user == None:
+            raise UserError("User not found!")
+        stored_password = user["password"]
+        password = password.encode()
+        password = hl.sha256(password).hexdigest()
+        if password == stored_password:
+            return True
+        return False
