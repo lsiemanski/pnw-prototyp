@@ -1,15 +1,22 @@
 import tkinter as tk
+
+from sqlalchemy import null
 import style
 import dialog
+import os
 
 
 class MenuDialog(tk.Frame):
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
         label = tk.Label(self, text="Menu główne", font=style.labelFont)
         label.pack(pady=style.labelpady)
+
+        self.labelCurrentUser = tk.Label(self, text='', font=style.labelFont)
+        self.labelCurrentUser.pack(pady=style.labelpady)
 
         #TODO: weryfikacje roli zalogowanego użytkownika
         button = tk.Button(self, text="Dodaj użytkownika", font=style.buttonFont, command=self.add_user)
@@ -44,6 +51,10 @@ class MenuDialog(tk.Frame):
 
     def show_history(self):
         self.controller.show_frame(dialog.historydialog.HistoryDialog)
+
+    def update_user(self):
+        user_name = os.environ.get('currentUser')
+        self.labelCurrentUser.config(text=f'Zalogowano jako: {user_name}')
 
     def quit(self):
         exit(0)
