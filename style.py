@@ -2,6 +2,7 @@ buttonpady = 5
 buttonpadx = 5
 labelpady = 10
 labelFont = ("Helvetica", 16)
+labelFontDesc = ("Helvetica", 11)
 buttonFont = ("Helvetica", 10)
 entryLabelFont = ("Helvetica", 12)
 errorLabelFont = ("Helvetica", 10)
