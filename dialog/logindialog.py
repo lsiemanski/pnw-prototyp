@@ -20,8 +20,6 @@ class LoginDialog(tk.Frame):
         label.pack(pady=style.labelpady)
 
 
-        # TODO: pola tk.Entry z nazwą użytkownika i hasłem
-
         labelUsrId = tk.Label(self, text="Nazwa użytkownika:", font=style.labelFontDesc)
         labelUsrId.pack(pady=style.labelpady)
 
@@ -34,20 +32,11 @@ class LoginDialog(tk.Frame):
         userPwd = tk.Entry(self, show="*")
         userPwd.pack()
 
-        
-        
-
         button = tk.Button(self, text="Zaloguj się", font=style.buttonFont, command=lambda: self.button_click(userId.get(), userPwd.get()))
         button.pack(pady=style.buttonpady)
 
         
     def button_click(self, userId, userPwd):
-        # TODO: logika weryfikacji użytkownika w bazie danych
-        # TODO: dane poprawne -> przejście do MenuDialog
-        # TODO: dane niepoprawne -> okienko z komunikatem o błędzie logowania
-        # TODO: zalogowany użytkownik musi być jakoś trzymany w aplikacji, bo jest potrzebny w innych miejscach
-        
-
         db = dataBase.DataBase()
         result = db.check_login_data(username=userId, password=userPwd)
 
@@ -55,7 +44,5 @@ class LoginDialog(tk.Frame):
             os.environ['currentUser'] = userId
             self.controller.frames[dialog.menudialog.MenuDialog].update_user()
             self.controller.show_frame(dialog.menudialog.MenuDialog)
-            #print('OK')     
         else:
-            #print('Wrong')
             messagebox.showerror('Błąd!','Błędny: login lub hasło')

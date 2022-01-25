@@ -3,3 +3,5 @@ dialog/__pycache__/
 logic/__pycache__/
 database.json
 database_copy.json
+report.csv
+small_data.csv

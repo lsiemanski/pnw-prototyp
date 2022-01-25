@@ -19,19 +19,11 @@ class PredictDialog(dialog.abstractdialog.AbstractDialog):
         label = tk.Label(self, text="Predykcja", font=style.labelFont)
         label.pack(pady=style.labelpady)
 
-        # TODO: sekcja pierwsza - predykcja z pliku
-        # TODO: użytkownik ładuje plik csv, z którego dane będą predykowane
-        # TODO: sprawdzić jakoś format pliku i czy się liczba kolumn zgadza
-        # TODO: jak coś się nie zgadza to komunikat
-
         buttonPath = tk.Button(self, text="Wybierz plik", font=style.buttonFont, command=lambda: self.buttonOnClickPath())
         buttonPath.pack(pady=style.buttonpady)
 
         or_label = tk.Label(self, text="LUB:", font=style.entryLabelFont)
         or_label.pack()
-
-        # TODO: sekcja druga - predykcja z próbki
-        # TODO: dodanie przycisku, który predykuje
 
         self.span = tk.StringVar()
         span_label = tk.Label(self, text="Rozpiętość", font=style.entryLabelFont)
@@ -92,11 +84,6 @@ class PredictDialog(dialog.abstractdialog.AbstractDialog):
         concrete_young_modulus_label.pack()
         self.concrete_young_modulus_entry = tk.Entry(self, textvariable=self.concrete_young_modulus)
         self.concrete_young_modulus_entry.pack()
-
-        # TODO: w obu przypadkach zapis do bazy wyników i nowy dialog/okienko modalne
-        # TODO: prezentacja wyników w formie tabeli dla zestawu danych z pliku
-        # TODO: prezentacja na pojedynczym polu dla jednej próbki
-        # TODO: przycisk generujący raport na podstawie wyników
 
         button = tk.Button(self, text="Predykuj", font=style.buttonFont, command=self.predict)
         button.pack(pady=style.buttonpady)

@@ -21,11 +21,6 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
         label = tk.Label(self, text="Dodaj dane eksperymentalne", font=style.labelFont)
         label.pack(pady=style.labelpady)
 
-        # TODO: sekcja pierwsza - dodaj dane z pliku
-        # TODO: użytkownik ładuje plik csv, z którego dane zostają przeniesione do bazy
-        # TODO: sprawdzić jakoś format pliku i czy się liczba kolumn zgadza
-        # TODO: jak coś się nie zgadza to komunikat
-
 
         buttonPath = tk.Button(self, text="Wybierz plik", font=style.buttonFont, command=lambda: self.buttonOnClickPath())
         buttonPath.pack(pady=style.buttonpady)
@@ -34,7 +29,6 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
         or_label.pack()
 
 
-        # =================================
 
         self.span = tk.StringVar()
         span_label = tk.Label(self, text="Rozpiętość", font=style.entryLabelFont)
@@ -112,9 +106,10 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
         if filename.endswith('.csv'):
             data = pd.read_csv(filename, sep=';')
             #print(data)
+            counter = 0
             for index, row in data.iterrows():
                 #self.write_to_database(row[0])
-                print(row[0], row[1])
+                counter += 1
                 parameters = {
                     "span": row['rozpietosc'],
                     "section_height": row['wysokosc przekroju'],
@@ -127,19 +122,8 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
                     "concrete_tensile_strength": row['Wytrzymalosc betonu na rozciaganie'],
                     "concrete_young_modulus": row['Modul Younga betonu']
                 }
-                # 0 szerokosc przekroju;
-                # 1 wysokosc przekroju;
-                # 2 rozpietosc;
-                # 3 stopien zbrojenia;
-                # 4 srednica zbrojenia;
-                # 5 otulina;
-                # 6 Modul Younga stali;
-                # 7 Modul Younga betonu;
-                # 8 Wytrzymalosc betonu na rozciaganie;
-                # 9 Obciazenie;
-                # 10 Ugięcia
-
                 self.write_to_database(param=parameters, res=row[10])
+                messagebox.showinfo('OK', f'Wprowadzono {counter} rekordów do bazy danych.')
 
         else:
             messagebox.showerror('Błąd!', f'Błędny format pliku: {filename}, plik musi być formatu .CSV')
@@ -177,18 +161,18 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
             return
         
     
-        param = {'span': self.span_entry.get(),
-                'section_height': self.section_height_entry.get(),
-                'steel_young_modulus': self.steel_young_modulus_entry.get(),
-                'reinforcement_grade': self.reinforcement_entry.get(),
-                'load': self.load_entry.get(),
-                'section_width': self.section_width_entry.get(),
-                'cover': self.cover_entry.get(),
-                'reinforcement_diameter': self.diameter_entry.get(),
-                'concrete_tensile_strength': self.concrete_strength_entry.get(),
-                'concrete_young_modulus': self.concrete_young_modulus_entry.get()
+        param = {'span': float(self.span_entry.get()),
+                'section_height': float(self.section_height_entry.get()),
+                'steel_young_modulus': float(self.steel_young_modulus_entry.get()),
+                'reinforcement_grade': float(self.reinforcement_entry.get()),
+                'load': float(self.load_entry.get()),
+                'section_width': float(self.section_width_entry.get()),
+                'cover': float(self.cover_entry.get()),
+                'reinforcement_diameter': float(self.diameter_entry.get()),
+                'concrete_tensile_strength': float(self.concrete_strength_entry.get()),
+                'concrete_young_modulus': float(self.concrete_young_modulus_entry.get())
                 }
-        #self.write_to_database(param=param, res=self.result_entry.get())
+        self.write_to_database(param=param, res=float(self.result_entry.get()))
 
         self.span_entry.delete(0, 'end')
         self.section_height_entry.delete(0, 'end')
@@ -207,11 +191,6 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
     def write_to_database(self, param, res):
         db = dataBase.DataBase()
         db.insert_sample(parameters=param, result=res)
-        
-        # TODO: sekcja druga - dodaj próbkę
-        # TODO: dodanie pól tk.Entry na podstawie których można dodać dane
-        # TODO: zapis tych danych do bazy
-        # TODO: dodanie przycisku, który dodaje
 
 
 
