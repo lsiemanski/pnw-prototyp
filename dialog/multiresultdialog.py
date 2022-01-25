@@ -1,19 +1,25 @@
 import tkinter as tk
+
+import dialog.abstractdialog
 import style
-from tkinter import ttk
+from tkinter import ttk, messagebox
 
 
-class MultiresultDialog(tk.Frame):
+class MultiresultDialog(dialog.abstractdialog.AbstractDialog):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
+        self.add_go_to_main_menu_button()
 
         label = tk.Label(self, text="Wyniki", font=style.labelFont)
         label.pack(pady=style.labelpady)
 
+        button = tk.Button(self, text="Generuj raport", font=style.buttonFont, command=self.generate_report)
+        button.pack(anchor=tk.NE, pady=style.buttonpady, padx=style.buttonpadx)
+
         scroll_y = ttk.Scrollbar(self, orient='vertical')
-        self.history = ttk.Treeview(self, yscrollcommand=scroll_y.set, height=10)
+        self.history = ttk.Treeview(self, yscrollcommand=scroll_y.set, height=50)
 
         scroll_y.pack(fill=tk.Y, side=tk.RIGHT)
         scroll_y.config(command=self.history.yview)
@@ -52,6 +58,8 @@ class MultiresultDialog(tk.Frame):
 
 
     def show_results(self, data, results):
+        self.data = data
+        self.results = results
         for i in self.history.get_children():
             self.history.delete(i)
         for index, result in data.iterrows():
@@ -62,4 +70,9 @@ class MultiresultDialog(tk.Frame):
                                         result['srednica zbrojenia'],
                                         result['Wytrzymalosc betonu na rozciaganie'], result['Modul Younga betonu'],
                                         results[index, 0]))
+
+    def generate_report(self):
+        self.data['Ugięcia'] = self.results
+        self.data.to_csv('report.csv', index=False, sep=';')
+        messagebox.showinfo("Sukces!", "Wygenerowano raport!")
 

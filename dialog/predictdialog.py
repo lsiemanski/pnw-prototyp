@@ -182,4 +182,16 @@ class PredictDialog(dialog.abstractdialog.AbstractDialog):
             "concrete_tensile_strength": self.concrete_strength.get(),
             "concrete_young_modulus": self.concrete_young_modulus.get()
         }
-        DataBase().insert_result(parameters, str(round(result, 5)), os.environ.get('currentUser'))
+        result = str(round(result, 5))
+        DataBase().insert_result(parameters, result, os.environ.get('currentUser'))
+        messagebox.showinfo("Sukces!", "Predykcja wynosi: %s" % result)
+        self.span_entry.delete(0, 'end')
+        self.section_height_entry.delete(0, 'end')
+        self.steel_young_modulus_entry.delete(0, 'end')
+        self.reinforcement_entry.delete(0, 'end')
+        self.load_entry.delete(0, 'end')
+        self.section_width_entry.delete(0, 'end')
+        self.cover_entry.delete(0, 'end')
+        self.diameter_entry.delete(0, 'end')
+        self.concrete_strength_entry.delete(0, 'end')
+        self.concrete_young_modulus_entry.delete(0, 'end')
