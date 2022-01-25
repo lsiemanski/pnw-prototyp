@@ -6,6 +6,7 @@ import dialog.logindialog
 import dialog.menudialog
 import dialog.adduserdialog
 import dialog.predictdialog
+import dialog.multiresultdialog
 from logic.nnlogic import NN
 
 
@@ -14,7 +15,7 @@ class App(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         self.title('Szacowanie wartości ugięcia belki żelbetowej')
-        self.geometry("500x600")
+        self.geometry("500x700")
 
         container = tk.Frame(self)
         container.pack(side="top", fill="x", expand=True)
@@ -33,7 +34,8 @@ class App(tk.Tk):
                   dialog.adduserdialog.AddUserDialog,
                   dialog.adddatadialog.AddDataDialog,
                   dialog.historydialog.HistoryDialog,
-                  dialog.predictdialog.PredictDialog):
+                  dialog.predictdialog.PredictDialog,
+                  dialog.multiresultdialog.MultiresultDialog):
             frame = F(container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")

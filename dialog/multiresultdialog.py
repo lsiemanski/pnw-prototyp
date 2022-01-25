@@ -1,24 +1,19 @@
-import os
 import tkinter as tk
 import style
-import dialog
-
 from tkinter import ttk
-from logic.dbservice import DataBase
 
 
-class HistoryDialog(dialog.abstractdialog.AbstractDialog):
+class MultiresultDialog(tk.Frame):
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        self.db = DataBase()
-        self.add_go_to_main_menu_button()
 
-        label = tk.Label(self, text="Historia obliczeń", font=style.labelFont)
+        label = tk.Label(self, text="Wyniki", font=style.labelFont)
         label.pack(pady=style.labelpady)
 
         scroll_y = ttk.Scrollbar(self, orient='vertical')
-        self.history = ttk.Treeview(self, yscrollcommand=scroll_y.set, height=50)
+        self.history = ttk.Treeview(self, yscrollcommand=scroll_y.set, height=10)
 
         scroll_y.pack(fill=tk.Y, side=tk.RIGHT)
         scroll_y.config(command=self.history.yview)
@@ -55,13 +50,16 @@ class HistoryDialog(dialog.abstractdialog.AbstractDialog):
 
         self.history.pack()
 
-    def update_data(self):
+
+    def show_results(self, data, results):
         for i in self.history.get_children():
             self.history.delete(i)
-        history_data = self.db.get_results_for_user(os.environ.get('currentUser'))
-        for index, result in enumerate(history_data):
+        for index, result in data.iterrows():
             self.history.insert(parent='', index='end', iid=index, text='',
-                           values=(result['span'], result['section_height'],
-                                   result['steel_young_modulus'], result['reinforcement_grade'],
-                                   result['load'], result['section_width'], result['cover'], result['reinforcement_diameter'],
-                                   result['concrete_tensile_strength'], result['concrete_young_modulus'], result['result']))
+                                values=(result['rozpietosc'], result['wysokosc przekroju'],
+                                        result['Modul Younga stali'], result['stopien zbrojenia'],
+                                        result['Obciazenie'], result['szerokosc przekroju'], result['otulina'],
+                                        result['srednica zbrojenia'],
+                                        result['Wytrzymalosc betonu na rozciaganie'], result['Modul Younga betonu'],
+                                        results[index, 0]))
+

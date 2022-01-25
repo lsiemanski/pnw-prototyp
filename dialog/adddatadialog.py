@@ -1,7 +1,6 @@
 import tkinter as tk
 from unittest import result
 
-from pytest import param
 import dialog.abstractdialog
 import style
 import pandas as pd 
@@ -116,17 +115,17 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
             for index, row in data.iterrows():
                 #self.write_to_database(row[0])
                 print(row[0], row[1])
-                param = {
-                'span': row[2],
-                'section_height': row[1],
-                'steel_young_modulus': row[6],
-                'reinforcement_grade': row[3],
-                'load': row[9],
-                'section_width': row[0],
-                'cover': row[5],
-                'reinforcement_diameter': row[4],
-                'concrete_tensile_strength': row[8],
-                'concrete_young_modulus': row[7]
+                parameters = {
+                    "span": row['rozpietosc'],
+                    "section_height": row['wysokosc przekroju'],
+                    "steel_young_modulus": row['Modul Younga stali'],
+                    "reinforcement_grade": row['stopien zbrojenia'],
+                    "load": row['Obciazenie'],
+                    "section_width": row['szerokosc przekroju'],
+                    "cover": row['otulina'],
+                    "reinforcement_diameter": row['srednica zbrojenia'],
+                    "concrete_tensile_strength": row['Wytrzymalosc betonu na rozciaganie'],
+                    "concrete_young_modulus": row['Modul Younga betonu']
                 }
                 # 0 szerokosc przekroju;
                 # 1 wysokosc przekroju;
@@ -140,7 +139,7 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
                 # 9 Obciazenie;
                 # 10 Ugięcia
 
-                self.write_to_database(param=param, res=row[10])
+                self.write_to_database(param=parameters, res=row[10])
 
         else:
             messagebox.showerror('Błąd!', f'Błędny format pliku: {filename}, plik musi być formatu .CSV')
