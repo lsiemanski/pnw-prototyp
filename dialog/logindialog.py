@@ -42,6 +42,7 @@ class LoginDialog(tk.Frame):
 
         if result:
             os.environ['currentUser'] = userId
+            os.environ['userRole'] = db.get_user(userId)['role']
             self.controller.frames[dialog.menudialog.MenuDialog].update_user()
             self.controller.show_frame(dialog.menudialog.MenuDialog)
         else:

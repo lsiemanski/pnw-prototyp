@@ -18,6 +18,7 @@ class NN():
         X, Y = np.split(samples, [-1], axis=1)
         model.fit(X, Y, epochs=5)
         model.save("trained_NN.json")
+        self.model = tf.keras.models.load_model("trained_NN.json")
 
     def predict(self, x):
         return self.model.predict(x)

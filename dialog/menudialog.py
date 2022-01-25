@@ -21,20 +21,20 @@ class MenuDialog(tk.Frame):
         self.labelCurrentUser.pack(pady=style.labelpady)
 
         #TODO: weryfikacje roli zalogowanego użytkownika
-        button = tk.Button(self, text="Dodaj użytkownika", font=style.buttonFont, command=self.add_user)
-        button.pack(pady=style.buttonpady)
+        self.add_user_button = tk.Button(self, text="Dodaj użytkownika", font=style.buttonFont, command=self.add_user)
+        self.add_user_button.pack(pady=style.buttonpady)
 
-        button = tk.Button(self, text="Dodaj dane", font=style.buttonFont, command=self.add_data)
-        button.pack(pady=style.buttonpady)
+        self.add_data_button = tk.Button(self, text="Dodaj dane", font=style.buttonFont, command=self.add_data)
+        self.add_data_button.pack(pady=style.buttonpady)
 
-        button = tk.Button(self, text="Wyucz sieć", font=style.buttonFont, command=self.train_network)
-        button.pack(pady=style.buttonpady)
+        self.train_button = tk.Button(self, text="Wyucz sieć", font=style.buttonFont, command=self.train_network)
+        self.train_button.pack(pady=style.buttonpady)
 
-        button = tk.Button(self, text="Predykcja", font=style.buttonFont, command=self.predict)
-        button.pack(pady=style.buttonpady)
+        self.predict_button = tk.Button(self, text="Predykcja", font=style.buttonFont, command=self.predict)
+        self.predict_button.pack(pady=style.buttonpady)
 
-        button = tk.Button(self, text="Historia obliczeń", font=style.buttonFont, command=self.show_history)
-        button.pack(pady=style.buttonpady)
+        self.history_button = tk.Button(self, text="Historia obliczeń", font=style.buttonFont, command=self.show_history)
+        self.history_button.pack(pady=style.buttonpady)
 
         button = tk.Button(self, text="Wyjdź", font=style.buttonFont, command=self.quit)
         button.pack(pady=style.buttonpady)
@@ -59,6 +59,13 @@ class MenuDialog(tk.Frame):
     def update_user(self):
         user_name = os.environ.get('currentUser')
         self.labelCurrentUser.config(text=f'Zalogowano jako: {user_name}')
+        if os.environ.get('userRole') == 'Inżynier':
+            self.add_data_button.forget()
+        else:
+            self.train_button.forget()
+            self.add_user_button.forget()
+            self.predict_button.forget()
+            self.history_button.forget()
 
     def quit(self):
         exit(0)
