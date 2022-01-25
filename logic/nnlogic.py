@@ -1,9 +1,3 @@
-# TODO: w tym pliku wszystkie rzeczy związane z siecią neuronową
-# TODO: wyuczony model sieci musi znajdować się w pliku trained_NN.json zgodnie z dokumentacją
-# TODO: z tego pliku też zaciągamy model przy predykcji
-# TODO: dodanie logiki uczenia sieci
-# TODO: dodanie logiki predykcji sieci
-
 import os
 import tensorflow as tf
 import numpy as np
@@ -22,7 +16,7 @@ class NN():
         model = self.create_model()
         samples = np.array(list(map(lambda sample: list(sample.values()), self.db.get_samples())))
         X, Y = np.split(samples, [-1], axis=1)
-        model.fit(X, Y, epochs=25)
+        model.fit(X, Y, epochs=5)
         model.save("trained_NN.json")
 
     def predict(self, x):

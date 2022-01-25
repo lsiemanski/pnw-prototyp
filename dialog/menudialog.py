@@ -5,6 +5,7 @@ import style
 import dialog
 from logic.nnlogic import NN
 import os
+from tkinter import messagebox
 
 
 class MenuDialog(tk.Frame):
@@ -46,6 +47,7 @@ class MenuDialog(tk.Frame):
 
     def train_network(self):
         self.controller.nn.train_network()
+        messagebox.showinfo("Sukces!", "Sieć została wytrenowana!")
 
     def predict(self):
         self.controller.show_frame(dialog.predictdialog.PredictDialog)
