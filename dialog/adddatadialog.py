@@ -1,8 +1,13 @@
 import tkinter as tk
+from unittest import result
+
+from pytest import param
 import dialog.abstractdialog
 import style
 import pandas as pd 
-from tkinter import messagebox
+from tkinter import Button, messagebox, ttk, filedialog as fd
+import logic.dbservice as dataBase
+
 
 class AddDataDialog(dialog.abstractdialog.AbstractDialog):
     def __init__(self, parent, controller):
@@ -10,6 +15,11 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
         self.controller = controller
 
         self.add_go_to_main_menu_button()
+
+        scroll = ttk.Scrollbar(self, orient='vertical')
+        
+        #scroll.pack(fill=tk.Y)
+        #scroll.config(command=self.controller. xview)
 
         label = tk.Label(self, text="Dodaj dane eksperymentalne", font=style.labelFont)
         label.pack(pady=style.labelpady)
@@ -19,82 +29,160 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
         # TODO: sprawdzić jakoś format pliku i czy się liczba kolumn zgadza
         # TODO: jak coś się nie zgadza to komunikat
 
-        labelPath = tk.Label(self, text="ścieżka:", font=style.labelFont)
-        labelPath.pack(pady=style.labelpady)
 
-        pathEntry = tk.Entry(self)
-        pathEntry.pack()
-
-        buttonPath = tk.Button(self, text="Wczytaj", font=style.buttonFont, command=lambda: self.buttonOnClickPath(pathEntry.get()))
+        buttonPath = tk.Button(self, text="Wybierz plik", font=style.buttonFont, command=lambda: self.buttonOnClickPath())
         buttonPath.pack(pady=style.buttonpady)
+
+        or_label = tk.Label(self, text="LUB:", font=style.entryLabelFont)
+        or_label.pack()
 
 
         # =================================
 
-        spanLabel = tk.Label(self, text="Span:", font=style.labelFontDesc)
-        spanLabel.pack(pady=style.labelpady)
+        self.span = tk.StringVar()
+        span_label = tk.Label(self, text="Rozpiętość", font=style.entryLabelFont)
+        span_label.pack()
+        self.span_entry = tk.Entry(self, textvariable=self.span)
+        self.span_entry.pack()
 
-        spanEntry = tk.Entry(self)
-        spanEntry.pack()
+        self.section_height = tk.StringVar()
+        section_height_label = tk.Label(self, text="Wysokość przekroju", font=style.entryLabelFont)
+        section_height_label.pack()
+        self.section_height_entry = tk.Entry(self, textvariable=self.section_height)
+        self.section_height_entry.pack()
 
-        section_heightLabel = tk.Label(self, text="Section height:", font=style.labelFontDesc)
-        section_heightLabel.pack(pady=style.labelpady)
+        self.steel_young_modulus = tk.StringVar()
+        steel_young_modulus_label = tk.Label(self, text="Moduł Younga stali", font=style.entryLabelFont)
+        steel_young_modulus_label.pack()
+        self.steel_young_modulus_entry = tk.Entry(self, textvariable=self.steel_young_modulus)
+        self.steel_young_modulus_entry.pack()
 
-        section_heightEntry = tk.Entry(self)
-        section_heightEntry.pack()
+        self.reinforcement = tk.StringVar()
+        reinforcement_label = tk.Label(self, text="Stopień zbrojenia", font=style.entryLabelFont)
+        reinforcement_label.pack()
+        self.reinforcement_entry = tk.Entry(self, textvariable=self.reinforcement)
+        self.reinforcement_entry.pack()
 
-        steel_young_modulusLabel = tk.Label(self, text="Steel young modulus:", font=style.labelFontDesc)
-        steel_young_modulusLabel.pack(pady=style.labelpady)
+        self.load = tk.StringVar()
+        load_label = tk.Label(self, text="Obciążenie", font=style.entryLabelFont)
+        load_label.pack()
+        self.load_entry = tk.Entry(self, textvariable=self.load)
+        self.load_entry.pack()
 
-        steel_young_modulusEntry = tk.Entry(self)
-        steel_young_modulusEntry.pack()
+        self.section_width = tk.StringVar()
+        section_width_label = tk.Label(self, text="Szerokość przekroju", font=style.entryLabelFont)
+        section_width_label.pack()
+        self.section_width_entry = tk.Entry(self, textvariable=self.section_width)
+        self.section_width_entry.pack()
 
-        reinforcement_gradeLabel = tk.Label(self, text="Reinforcement grade:", font=style.labelFontDesc)
-        reinforcement_gradeLabel.pack(pady=style.labelpady)
+        self.cover = tk.StringVar()
+        cover_label = tk.Label(self, text="Otulina", font=style.entryLabelFont)
+        cover_label.pack()
+        self.cover_entry = tk.Entry(self, textvariable=self.cover)
+        self.cover_entry.pack()
 
-        reinforcement_gradeEntry = tk.Entry(self)
-        reinforcement_gradeEntry.pack()
+        self.diameter = tk.StringVar()
+        diameter_label = tk.Label(self, text="Średnica zbrojenia", font=style.entryLabelFont)
+        diameter_label.pack()
+        self.diameter_entry = tk.Entry(self, textvariable=self.diameter)
+        self.diameter_entry.pack()
 
-        loadLabel = tk.Label(self, text="Load:", font=style.labelFontDesc)
-        loadLabel.pack(pady=style.labelpady)
+        self.concrete_strength = tk.StringVar()
+        concrete_strength_label = tk.Label(self, text="Wytrzymałość betonu na rozciąganie", font=style.entryLabelFont)
+        concrete_strength_label.pack()
+        self.concrete_strength_entry = tk.Entry(self, textvariable=self.concrete_strength)
+        self.concrete_strength_entry.pack()
 
-        loadEntry = tk.Entry(self)
-        loadEntry.pack()
+        self.concrete_young_modulus = tk.StringVar()
+        concrete_young_modulus_label = tk.Label(self, text="Moduł Younga betonu", font=style.entryLabelFont)
+        concrete_young_modulus_label.pack()
+        self.concrete_young_modulus_entry = tk.Entry(self, textvariable=self.concrete_young_modulus)
+        self.concrete_young_modulus_entry.pack()
 
-        secton_widthLabel = tk.Label(self, text="Secton width:", font=style.labelFontDesc)
-        secton_widthLabel.pack(pady=style.labelpady)
+        self.result = tk.StringVar()
+        result_label = tk.Label(self, text="Znany wynik", font=style.entryLabelFont)
+        result_label.pack()
+        self.result_label_entry = tk.Entry(self, textvariable=self.result)
+        self.result_label_entry.pack()
 
-        secton_widthEntry = tk.Entry(self)
-        secton_widthEntry.pack()    
-
-        coverLabel = tk.Label(self, text="Cover:", font=style.labelFontDesc)
-        coverLabel.pack(pady=style.labelpady)
-
-        coverEntry = tk.Entry(self)
-        coverEntry.pack()       
+        ok_button = tk.Button(self, text="Dodaj dane", font=style.buttonFont, command=lambda: self.buttonOnClickManual())
+        ok_button.pack(pady=style.buttonpady)
 
 
 
-    def buttonOnClickPath(self, path):
-        try:
-            self.data = pd.read_csv(f"{path}", sep=';')
-        except:
-            messagebox.showerror('Błąd!','Nie odnaleziono pliku!')
+    def buttonOnClickPath(self):
+        filename = fd.askopenfilename()
+        if filename.endswith('.csv'):
+            data = pd.read_csv(filename, sep=';')
+            #print(data)
+            for index, row in data.iterrows():
+                #self.write_to_database(row[0])
+                print(row[0], row[1])
+                param = {
+                'span': row[2],
+                'section_height': row[1],
+                'steel_young_modulus': row[6],
+                'reinforcement_grade': row[3],
+                'load': row[9],
+                'section_width': row[0],
+                'cover': row[5],
+                'reinforcement_diameter': row[4],
+                'concrete_tensile_strength': row[8],
+                'concrete_young_modulus': row[7]
+                }
+                # 0 szerokosc przekroju;
+                # 1 wysokosc przekroju;
+                # 2 rozpietosc;
+                # 3 stopien zbrojenia;
+                # 4 srednica zbrojenia;
+                # 5 otulina;
+                # 6 Modul Younga stali;
+                # 7 Modul Younga betonu;
+                # 8 Wytrzymalosc betonu na rozciaganie;
+                # 9 Obciazenie;
+                # 10 Ugięcia
 
+                self.write_to_database(param=param, res=row[10])
+
+        else:
+            messagebox.showerror('Błąd!', f'Błędny format pliku: {filename}, plik musi być formatu .CSV')
+
+    def buttonOnClickManual(self):
+        param = {'span': self.span_entry.get(),
+                'section_height': self.section_height_entry.get(),
+                'steel_young_modulus': self.steel_young_modulus_entry.get(),
+                'reinforcement_grade': self.reinforcement_entry.get(),
+                'load': self.load_entry.get(),
+                'section_width': self.section_width_entry.get(),
+                'cover': self.cover_entry.get(),
+                'reinforcement_diameter': self.diameter_entry.get(),
+                'concrete_tensile_strength': self.concrete_strength_entry.get(),
+                'concrete_young_modulus': self.concrete_young_modulus_entry.get()
+                }
+        self.write_to_database(param=param, res=self.result_label_entry.get())
+
+        self.span_entry.delete(0, 'end')
+        self.section_height_entry.delete(0, 'end')
+        self.steel_young_modulus_entry.delete(0, 'end')
+        self.reinforcement_entry.delete(0, 'end')
+        self.load_entry.delete(0, 'end')
+        self.section_width_entry.delete(0, 'end')
+        self.cover_entry.delete(0, 'end')
+        self.diameter_entry.delete(0, 'end')
+        self.concrete_strength_entry.delete(0, 'end')
+        self.concrete_young_modulus_entry.delete(0, 'end')
+        self.result_label_entry.delete(0, 'end')
+
+        messagebox.showinfo('', 'Dodano do bazy danych')
+
+    def write_to_database(self, param, res):
+        db = dataBase.DataBase()
+        db.insert_sample(parameters=param, result=res)
         
         # TODO: sekcja druga - dodaj próbkę
         # TODO: dodanie pól tk.Entry na podstawie których można dodać dane
         # TODO: zapis tych danych do bazy
         # TODO: dodanie przycisku, który dodaje
 
-
-
-    
-        '''
-            'reinforcement_diameter': parameters['reinforcement_diameter'],
-            'concrete_tensile_strength': parameters['concrete_tensile_strength'],
-            'concrete_young_modulus': parameters['concrete_young_modulus'],
-
-'''
 
 
