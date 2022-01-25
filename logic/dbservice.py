@@ -17,7 +17,7 @@ class DataBase:
         user = tdb.Query()
         users = self.users.search(user.username == username)
         if len(users) != 0:
-            raise UserError("User already exists!")
+            raise UserError("Użytkownik o podanej nazwie już istnieje!")
         self.users.insert({
             'username' : username,
             'password' : hl.sha256(password).hexdigest(),
@@ -32,7 +32,7 @@ class DataBase:
             'steel_young_modulus': parameters['steel_young_modulus'],
             'reinforcement_grade': parameters['reinforcement_grade'],
             'load': parameters['load'],
-            'secton_width': parameters['section_width'],
+            'section_width': parameters['section_width'],
             'cover': parameters['cover'],
             'reinforcement_diameter': parameters['reinforcement_diameter'],
             'concrete_tensile_strength': parameters['concrete_tensile_strength'],

@@ -1,6 +1,7 @@
 import tkinter as tk
 import style
 import dialog
+import numpy as np
 
 
 class PredictDialog(dialog.abstractdialog.AbstractDialog):
@@ -85,3 +86,14 @@ class PredictDialog(dialog.abstractdialog.AbstractDialog):
         # TODO: prezentacja wyników w formie tabeli dla zestawu danych z pliku
         # TODO: prezentacja na pojedynczym polu dla jednej próbki
         # TODO: przycisk generujący raport na podstawie wyników
+
+        button = tk.Button(self, text="Predykuj", font=style.buttonFont, command=self.predict)
+        button.pack(pady=style.buttonpady)
+
+    def predict(self):
+        X = np.array([[float(self.span.get()), float(self.section_height.get()), float(self.steel_young_modulus.get()),
+                      float(self.reinforcement.get()), float(self.load.get()), float(self.section_width.get()),
+                      float(self.cover.get()), float(self.diameter.get()), float(self.concrete_strength.get()),
+                      float(self.concrete_young_modulus.get())]])
+
+        print(self.controller.nn.predict(X)[0, 0])

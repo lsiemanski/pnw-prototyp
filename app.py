@@ -6,6 +6,7 @@ import dialog.logindialog
 import dialog.menudialog
 import dialog.adduserdialog
 import dialog.predictdialog
+from logic.nnlogic import NN
 
 
 class App(tk.Tk):
@@ -25,6 +26,7 @@ class App(tk.Tk):
         self.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
+        self.nn = NN()
 
         for F in (dialog.logindialog.LoginDialog,
                   dialog.menudialog.MenuDialog,

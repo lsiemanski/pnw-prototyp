@@ -3,13 +3,15 @@ import style
 import dialog
 from tkinter import ttk
 
-from logic.entity.User import User
+from logic.dbservice import DataBase, UserError
 
 
 class AddUserDialog(dialog.abstractdialog.AbstractDialog):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        self.parent = parent
         self.controller = controller
+        self.db = DataBase()
 
         self.add_go_to_main_menu_button()
 
@@ -48,13 +50,15 @@ class AddUserDialog(dialog.abstractdialog.AbstractDialog):
 
     def add_user(self):
         if self.validate():
-            user = User(self.username.get(), self.password.get(), self.role.get())
-            self.username.set('')
-            self.password.set('')
-            self.role.set('')
-        # TODO: zapisz usera w bazie
-        # TODO: komunikat jak się udało
-        # TODO: powrót do menu głównego po zapisie
+            try:
+                self.db.insert_user(self.username.get(), self.password.get(), '', self.role.get())
+                self.username.set('')
+                self.password.set('')
+                self.role.set('')
+                self.pop_window("Użytkownik dodany!")
+                self.controller.show_frame(dialog.menudialog.MenuDialog)
+            except UserError as error:
+                self.pop_window(str(error))
 
     def validate(self):
         correct_login = self.validate_login()
@@ -82,3 +86,20 @@ class AddUserDialog(dialog.abstractdialog.AbstractDialog):
         else:
             self.empty_role_label.pack()
         return self.role.get() != ''
+
+    def pop_window(self, message):
+        pop = tk.Toplevel(self)
+        pop.geometry("300x150")
+        pop.resizable(0, 0)
+        label = tk.Label(pop, text=message, pady=style.labelpady, font=style.entryLabelFont)
+        label.pack()
+        button = tk.Button(pop, text="OK", pady=style.buttonpady, font=style.buttonFont, command=lambda: pop.destroy())
+        button.pack()
+        x = self.controller.winfo_x()
+        y = self.controller.winfo_y()
+        w = 300
+        h = 90
+        c_w = self.controller.winfo_width()
+        c_h = self.controller.winfo_width()
+        pop.geometry("%dx%d+%d+%d" % (w, h, x + (c_w-w)/2, y + (c_h-h)/2))
+

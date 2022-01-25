@@ -3,6 +3,7 @@ import tkinter as tk
 from sqlalchemy import null
 import style
 import dialog
+from logic.nnlogic import NN
 import os
 
 
@@ -44,7 +45,7 @@ class MenuDialog(tk.Frame):
         self.controller.show_frame(dialog.adddatadialog.AddDataDialog)
 
     def train_network(self):
-        pass #TODO: logika trenowania sieci i okienko modalne informujące o postępie/zakończeniu
+        self.controller.nn.train_network()
 
     def predict(self):
         self.controller.show_frame(dialog.predictdialog.PredictDialog)
