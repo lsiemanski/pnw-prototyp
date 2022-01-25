@@ -7,6 +7,7 @@ import style
 import pandas as pd 
 from tkinter import Button, messagebox, ttk, filedialog as fd
 import logic.dbservice as dataBase
+import re
 
 
 class AddDataDialog(dialog.abstractdialog.AbstractDialog):
@@ -17,9 +18,6 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
         self.add_go_to_main_menu_button()
 
         scroll = ttk.Scrollbar(self, orient='vertical')
-        
-        #scroll.pack(fill=tk.Y)
-        #scroll.config(command=self.controller. xview)
 
         label = tk.Label(self, text="Dodaj dane eksperymentalne", font=style.labelFont)
         label.pack(pady=style.labelpady)
@@ -102,8 +100,8 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
         self.result = tk.StringVar()
         result_label = tk.Label(self, text="Znany wynik", font=style.entryLabelFont)
         result_label.pack()
-        self.result_label_entry = tk.Entry(self, textvariable=self.result)
-        self.result_label_entry.pack()
+        self.result_entry = tk.Entry(self, textvariable=self.result)
+        self.result_entry.pack()
 
         ok_button = tk.Button(self, text="Dodaj dane", font=style.buttonFont, command=lambda: self.buttonOnClickManual())
         ok_button.pack(pady=style.buttonpady)
@@ -148,6 +146,38 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
             messagebox.showerror('Błąd!', f'Błędny format pliku: {filename}, plik musi być formatu .CSV')
 
     def buttonOnClickManual(self):
+
+        if (self.span_entry.get() == '' or 
+                self.section_height_entry.get() == '' or 
+                self.steel_young_modulus_entry.get() == '' or 
+                self.reinforcement_entry.get() == '' or 
+                self.load_entry.get() == '' or 
+                self.section_width_entry.get() == '' or 
+                self.cover_entry.get() == '' or
+                self.diameter_entry.get() == '' or
+                self.concrete_strength_entry.get() == '' or
+                self.concrete_young_modulus_entry.get() == ''
+            ):
+            messagebox.showerror('Błąd!', 'Żadne z pól nie może być puste!')
+            return
+
+        try:
+            float(self.span_entry.get())
+            float(self.section_height_entry.get())
+            float(self.steel_young_modulus_entry.get())
+            float(self.reinforcement_entry.get())  
+            float(self.load_entry.get()) 
+            float(self.section_width_entry.get())  
+            float(self.cover_entry.get()) 
+            float(self.diameter_entry.get()) 
+            float(self.concrete_strength_entry.get()) 
+            float(self.concrete_young_modulus_entry.get())
+            float(self.result_entry.get())
+        except:
+            messagebox.showerror('Błąd', 'Nieprawidłowy format danych. Dane powinny być liczbą')
+            return
+        
+    
         param = {'span': self.span_entry.get(),
                 'section_height': self.section_height_entry.get(),
                 'steel_young_modulus': self.steel_young_modulus_entry.get(),
@@ -159,7 +189,7 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
                 'concrete_tensile_strength': self.concrete_strength_entry.get(),
                 'concrete_young_modulus': self.concrete_young_modulus_entry.get()
                 }
-        self.write_to_database(param=param, res=self.result_label_entry.get())
+        #self.write_to_database(param=param, res=self.result_entry.get())
 
         self.span_entry.delete(0, 'end')
         self.section_height_entry.delete(0, 'end')
@@ -171,7 +201,7 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
         self.diameter_entry.delete(0, 'end')
         self.concrete_strength_entry.delete(0, 'end')
         self.concrete_young_modulus_entry.delete(0, 'end')
-        self.result_label_entry.delete(0, 'end')
+        self.result_entry.delete(0, 'end')
 
         messagebox.showinfo('', 'Dodano do bazy danych')
 
