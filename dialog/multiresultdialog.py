@@ -1,5 +1,4 @@
 import tkinter as tk
-
 import dialog.abstractdialog
 import style
 from tkinter import ttk, messagebox

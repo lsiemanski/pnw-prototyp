@@ -2,7 +2,6 @@ import os
 import tkinter as tk
 import style
 import dialog
-
 from tkinter import ttk
 from logic.dbservice import DataBase
 

@@ -1,9 +1,7 @@
 import tkinter as tk
 
-from sqlalchemy import null
 import style
 import dialog
-from logic.nnlogic import NN
 import os
 from tkinter import messagebox
 
@@ -20,7 +18,6 @@ class MenuDialog(tk.Frame):
         self.labelCurrentUser = tk.Label(self, text='', font=style.labelFont)
         self.labelCurrentUser.pack(pady=style.labelpady)
 
-        #TODO: weryfikacje roli zalogowanego użytkownika
         self.add_user_button = tk.Button(self, text="Dodaj użytkownika", font=style.buttonFont, command=self.add_user)
         self.add_user_button.pack(pady=style.buttonpady)
 

@@ -1,34 +1,25 @@
 import tkinter as tk
-from unittest import result
-
 import dialog.abstractdialog
 import style
 import pandas as pd 
-from tkinter import Button, messagebox, ttk, filedialog as fd
+from tkinter import messagebox, filedialog as fd
 import logic.dbservice as dataBase
-import re
 
 
 class AddDataDialog(dialog.abstractdialog.AbstractDialog):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-
         self.add_go_to_main_menu_button()
-
-        scroll = ttk.Scrollbar(self, orient='vertical')
 
         label = tk.Label(self, text="Dodaj dane eksperymentalne", font=style.labelFont)
         label.pack(pady=style.labelpady)
-
 
         buttonPath = tk.Button(self, text="Wybierz plik", font=style.buttonFont, command=lambda: self.buttonOnClickPath())
         buttonPath.pack(pady=style.buttonpady)
 
         or_label = tk.Label(self, text="LUB:", font=style.entryLabelFont)
         or_label.pack()
-
-
 
         self.span = tk.StringVar()
         span_label = tk.Label(self, text="Rozpiętość", font=style.entryLabelFont)
@@ -99,16 +90,12 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
         ok_button = tk.Button(self, text="Dodaj dane", font=style.buttonFont, command=lambda: self.buttonOnClickManual())
         ok_button.pack(pady=style.buttonpady)
 
-
-
     def buttonOnClickPath(self):
         filename = fd.askopenfilename()
         if filename.endswith('.csv'):
             data = pd.read_csv(filename, sep=';')
-            #print(data)
             counter = 0
             for index, row in data.iterrows():
-                #self.write_to_database(row[0])
                 counter += 1
                 parameters = {
                     "span": row['rozpietosc'],
@@ -124,13 +111,11 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
                 }
                 self.write_to_database(param=parameters, res=row[10])
                 messagebox.showinfo('OK', f'Wprowadzono {counter} rekordów do bazy danych.')
-
-        else:
+        elif filename:
             messagebox.showerror('Błąd!', f'Błędny format pliku: {filename}, plik musi być formatu .CSV')
 
     def buttonOnClickManual(self):
-
-        if (self.span_entry.get() == '' or 
+        if (self.span_entry.get() == '' or
                 self.section_height_entry.get() == '' or 
                 self.steel_young_modulus_entry.get() == '' or 
                 self.reinforcement_entry.get() == '' or 
@@ -191,6 +176,3 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
     def write_to_database(self, param, res):
         db = dataBase.DataBase()
         db.insert_sample(parameters=param, result=res)
-
-
-

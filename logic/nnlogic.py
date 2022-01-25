@@ -7,7 +7,7 @@ from logic.dbservice import DataBase
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # disable tensorflow warnings
 
 
-class NN():
+class NN:
     def __init__(self):
         self.db = DataBase()
         self.model = tf.keras.models.load_model("trained_NN.json")

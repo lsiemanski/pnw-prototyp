@@ -2,7 +2,6 @@ import tkinter as tk
 import style
 import dialog
 from tkinter import ttk, messagebox
-
 from logic.dbservice import DataBase, UserError
 
 
