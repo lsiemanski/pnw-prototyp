@@ -23,11 +23,12 @@ if len(db.get_samples()) == 0:
         }
         db.insert_sample(parameters, row['Ugięcia'])
 
-db.insert_user("Adam", "12345", "", "Inżynier")
+#db.insert_user("Adam", "12345", "", "Inżynier")
 
 samples = np.array(list(map(lambda sample: list(sample.values()), db.get_samples())))
 X, Y = np.split(samples, [-1], axis=1)
 
+NN().train_network()
 
 print(NN().predict(np.array([X[100]])))
 print(Y[100])

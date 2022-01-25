@@ -41,49 +41,21 @@ class AddUserDialog(dialog.abstractdialog.AbstractDialog):
         button = tk.Button(self, text="Dodaj", font=style.buttonFont, command=self.add_user)
         button.pack(pady=style.buttonpady)
 
-        self.empty_username_label = tk.Label(self, text="Wprowadź nazwę użytkownika!", font=style.errorLabelFont,
-                                             fg=style.errorLabelFontColor)
-        self.empty_password_label = tk.Label(self, text="Wprowadź hasło!", font=style.errorLabelFont,
-                                        fg=style.errorLabelFontColor)
-        self.empty_role_label = tk.Label(self, text="Wybierz rolę!", font=style.errorLabelFont,
-                                    fg=style.errorLabelFontColor)
 
     def add_user(self):
-        if self.validate():
-            try:
-                self.db.insert_user(self.username.get(), self.password.get(), '', self.role.get())
-                self.username.set('')
-                self.password.set('')
-                self.role.set('')
-                messagebox.showinfo("Sukces!", "Użytkownik dodany!")
-                self.controller.show_frame(dialog.menudialog.MenuDialog)
-            except UserError as error:
-                messagebox.showerror("Błąd!", str(error))
+        if self.username_entry.get() == '' or self.password_entry.get() == '' or self.role_combobox.get() == '':
+            messagebox.showerror('Błąd','Żadne z pól nie może być puste!')
+            return
 
-    def validate(self):
-        correct_login = self.validate_login()
-        correct_password = self.validate_password()
-        correct_role = self.validate_role()
-        return correct_login and correct_password and correct_role
+        try:
+            self.db.insert_user(self.username.get(), self.password.get(), '', self.role.get())
+            self.username.set('')
+            self.password.set('')
+            self.role.set('')
+            messagebox.showinfo("Sukces!", "Użytkownik dodany!")
+            self.controller.show_frame(dialog.menudialog.MenuDialog)
+        except UserError as error:
+            messagebox.showerror("Błąd!", str(error))
 
-    def validate_login(self):
-        if self.username.get():
-            self.empty_username_label.forget()
-        else:
-            self.empty_username_label.pack()
-        return self.username.get() != ''
 
-    def validate_password(self):
-        if self.password.get():
-            self.empty_password_label.pack_forget()
-        else:
-            self.empty_password_label.pack()
-        return self.password.get() != ''
-
-    def validate_role(self):
-        if self.role.get():
-            self.empty_role_label.pack_forget()
-        else:
-            self.empty_role_label.pack()
-        return self.role.get() != ''
 

@@ -135,6 +135,35 @@ class PredictDialog(dialog.abstractdialog.AbstractDialog):
             DataBase().insert_result(parameters, str(round(results[index, 0], 5)), os.environ.get('currentUser'))
 
     def predict(self):
+        if (self.span_entry.get() == '' or 
+                self.section_height_entry.get() == '' or 
+                self.steel_young_modulus_entry.get() == '' or 
+                self.reinforcement_entry.get() == '' or 
+                self.load_entry.get() == '' or 
+                self.section_width_entry.get() == '' or 
+                self.cover_entry.get() == '' or
+                self.diameter_entry.get() == '' or
+                self.concrete_strength_entry.get() == '' or
+                self.concrete_young_modulus_entry.get() == ''
+            ):
+            messagebox.showerror('Błąd!', 'Żadne z pól nie może być puste!')
+            return
+
+        try:
+            float(self.span_entry.get())
+            float(self.section_height_entry.get())
+            float(self.steel_young_modulus_entry.get())
+            float(self.reinforcement_entry.get())  
+            float(self.load_entry.get()) 
+            float(self.section_width_entry.get())  
+            float(self.cover_entry.get()) 
+            float(self.diameter_entry.get()) 
+            float(self.concrete_strength_entry.get()) 
+            float(self.concrete_young_modulus_entry.get())
+        except:
+            messagebox.showerror('Błąd', 'Nieprawidłowy format danych. Dane powinny być liczbą')
+            return
+
         X = np.array([[float(self.span.get()), float(self.section_height.get()), float(self.steel_young_modulus.get()),
                       float(self.reinforcement.get()), float(self.load.get()), float(self.section_width.get()),
                       float(self.cover.get()), float(self.diameter.get()), float(self.concrete_strength.get()),

@@ -1,0 +1,5 @@
+__pycache__/
+dialog/__pycache__/
+logic/__pycache__/
+database.json
+database_copy.json
