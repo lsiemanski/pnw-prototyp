@@ -1,7 +1,10 @@
+import os
 import tkinter as tk
 import style
 import dialog
 import numpy as np
+
+from logic.dbservice import DataBase
 
 
 class PredictDialog(dialog.abstractdialog.AbstractDialog):
@@ -96,4 +99,17 @@ class PredictDialog(dialog.abstractdialog.AbstractDialog):
                       float(self.cover.get()), float(self.diameter.get()), float(self.concrete_strength.get()),
                       float(self.concrete_young_modulus.get())]])
 
-        print(self.controller.nn.predict(X)[0, 0])
+        result = self.controller.nn.predict(X)[0, 0]
+        parameters = {
+            "span": self.span.get(),
+            "section_height": self.section_height.get(),
+            "steel_young_modulus": self.steel_young_modulus.get(),
+            "reinforcement_grade": self.reinforcement.get(),
+            "load": self.load.get(),
+            "section_width": self.section_width.get(),
+            "cover": self.cover.get(),
+            "reinforcement_diameter": self.diameter.get(),
+            "concrete_tensile_strength": self.concrete_strength.get(),
+            "concrete_young_modulus": self.concrete_young_modulus.get()
+        }
+        DataBase().insert_result(parameters, str(round(result, 5)), os.environ.get('currentUser'))

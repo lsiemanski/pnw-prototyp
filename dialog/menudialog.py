@@ -54,6 +54,7 @@ class MenuDialog(tk.Frame):
 
     def show_history(self):
         self.controller.show_frame(dialog.historydialog.HistoryDialog)
+        self.controller.frames[dialog.historydialog.HistoryDialog].update_data()
 
     def update_user(self):
         user_name = os.environ.get('currentUser')
