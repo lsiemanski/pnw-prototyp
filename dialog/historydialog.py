@@ -3,19 +3,19 @@ import style
 import dialog
 
 from tkinter import ttk
+from logic.dbservice import DataBase
 
 
 class HistoryDialog(dialog.abstractdialog.AbstractDialog):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-
+        self.db = DataBase()
         self.add_go_to_main_menu_button()
 
         label = tk.Label(self, text="Historia obliczeń", font=style.labelFont)
         label.pack(pady=style.labelpady)
 
-        # TODO: wyciąganie i dodawanie danych z bazy
 
         scroll = ttk.Scrollbar(self, orient='horizontal')
         history = ttk.Treeview(self, xscrollcommand=scroll.set)
@@ -50,8 +50,13 @@ class HistoryDialog(dialog.abstractdialog.AbstractDialog):
         history.heading("moduł Younga betonu", text="moduł Younga betonu", anchor=tk.CENTER)
         history.heading("ugięcie", text="ugięcie", anchor=tk.CENTER)
 
-        history.insert(parent='', index='end', iid=0, text='',
-                       values=('1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'))
+        history_data = self.db.get_results()
+        for result in history_data:
+            history.insert(parent='', index='end', iid=0, text='',
+                       values=(result['username'], result['span'], result['section_height'], result['steel_young_modulus'], result['reinforcement_grade'
+                       ], result['load'], result['section_width'], result['cover'], result['reinforcement_diameter'], result['concrete_tensile_strength'
+                       ], result['concrete_young_modulus'], result['result']))
+
 
         history.pack()
         scroll.pack(fill=tk.X)
