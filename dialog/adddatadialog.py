@@ -110,7 +110,7 @@ class AddDataDialog(dialog.abstractdialog.AbstractDialog):
                     "concrete_young_modulus": row['Modul Younga betonu']
                 }
                 self.write_to_database(param=parameters, res=row[10])
-                messagebox.showinfo('OK', f'Wprowadzono {counter} rekordów do bazy danych.')
+            messagebox.showinfo('OK', f'Wprowadzono {counter} rekordów do bazy danych.')
         elif filename:
             messagebox.showerror('Błąd!', f'Błędny format pliku: {filename}, plik musi być formatu .CSV')
 
