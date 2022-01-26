@@ -11,7 +11,7 @@ class NNLogicTest(unittest.TestCase):
     def test_train_model(self):
         nn = logic.nnlogic.NN()
         nn.train_network()
-        assert(exists('./trained_NN.json'))
+        self.assertTrue(exists('../trained_NN.json'))
 
     def test_predict(self):
         nn = logic.nnlogic.NN()
@@ -26,5 +26,10 @@ class NNLogicTest(unittest.TestCase):
          'Wytrzymalosc betonu na rozciaganie' : 51.2,
          'Modul Younga betonu' : 97}
         predicted = nn.predict(data)
-        assert(predicted != None and predicted is double)
+        self.assertTrue(predicted != None and predicted is double)
+
+    def test_create_model(self):
+        nn = logic.nnlogic.NN()
+        model = nn.create_model()
+        self.assertTrue(model != None)
 
